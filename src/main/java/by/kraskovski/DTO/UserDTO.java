@@ -1,28 +1,13 @@
-package by.kraskovski.model;
+package by.kraskovski.DTO;
 
-import org.springframework.data.annotation.Id;
+import org.hibernate.validator.constraints.NotEmpty;
 
-public class User {
+public class UserDTO {
 
-    @Id
     private String id;
     private String firstname;
     private String lastname;
     private int age;
-
-    public User() {
-    }
-
-    public User(String firstname, String lastname) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-    }
-
-    public User(String firstname, String lastname, int age) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.age = age;
-    }
 
     public String getId() {
         return id;
