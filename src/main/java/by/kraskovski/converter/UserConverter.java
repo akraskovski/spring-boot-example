@@ -2,11 +2,8 @@ package by.kraskovski.converter;
 
 import by.kraskovski.DTO.UserDTO;
 import by.kraskovski.model.User;
-import org.springframework.stereotype.Component;
 
-@Component
-public class UserConverter {
-
+public final class UserConverter {
     public static User DTOtoUser(UserDTO userDTO) {
         User user = new User();
         user.setFirstname(userDTO.getFirstname());

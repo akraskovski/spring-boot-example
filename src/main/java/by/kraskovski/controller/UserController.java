@@ -29,8 +29,8 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
         LOGGER.info("start creating user: ", userDTO);
-        User user = UserConverter.DTOtoUser(userDTO);
-        return new ResponseEntity<>(UserConverter.userToDTO(userService.create(user)), HttpStatus.CREATED);
+        User user = userService.create(UserConverter.DTOtoUser(userDTO));
+        return new ResponseEntity<>(UserConverter.userToDTO(user), HttpStatus.CREATED);
     }
 
     @RequestMapping

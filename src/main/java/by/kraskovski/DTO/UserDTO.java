@@ -1,7 +1,5 @@
 package by.kraskovski.DTO;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
 public class UserDTO {
 
     private String id;
