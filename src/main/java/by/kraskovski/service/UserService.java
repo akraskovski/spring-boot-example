@@ -13,5 +13,5 @@ public interface UserService {
 
     User update(User object);
 
-    void delete(String id);
+    boolean delete(String id);
 }

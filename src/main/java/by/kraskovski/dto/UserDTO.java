@@ -1,4 +1,4 @@
-package by.kraskovski.DTO;
+package by.kraskovski.dto;
 
 public class UserDTO {
 
