@@ -1,7 +1,7 @@
 package by.kraskovski.controller;
 
-import by.kraskovski.dto.UserDTO;
 import by.kraskovski.converter.UserConverter;
+import by.kraskovski.dto.UserDTO;
 import by.kraskovski.model.User;
 import by.kraskovski.service.UserService;
 import org.slf4j.Logger;
@@ -52,11 +52,11 @@ public class UserController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO userDTO) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<UserDTO> update(@PathVariable String id, @RequestBody UserDTO userDTO) {
         LOGGER.info("start update user: ", userDTO);
         try {
-            User user = userService.update(userConverter.DTOtoUser(userDTO));
+            User user = userService.update(id, userConverter.DTOtoUser(userDTO));
             return new ResponseEntity<>(userConverter.userToDTO(user), HttpStatus.OK);
         } catch (DataAccessException e) {
             LOGGER.info(e.getMessage());

@@ -3,12 +3,20 @@ package by.kraskovski.model;
 import org.springframework.data.annotation.Id;
 
 public class User {
-
     @Id
     private String id;
     private String firstname;
     private String lastname;
     private int age;
+
+    public User() {
+    }
+
+    public User(String firstname, String lastname, int age) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.age = age;
+    }
 
     public String getId() {
         return id;
@@ -40,5 +48,10 @@ public class User {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "ID:[" + id + "] FIRSTNAME:[" + firstname + "] LASTNAME:[" + lastname + "] AGE:[" + age + "].";
     }
 }

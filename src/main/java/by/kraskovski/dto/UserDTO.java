@@ -1,7 +1,6 @@
 package by.kraskovski.dto;
 
 public class UserDTO {
-
     private String id;
     private String firstname;
     private String lastname;

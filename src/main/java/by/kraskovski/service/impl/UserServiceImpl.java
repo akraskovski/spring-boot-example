@@ -3,7 +3,6 @@ package by.kraskovski.service.impl;
 import by.kraskovski.model.User;
 import by.kraskovski.repository.UserRepository;
 import by.kraskovski.service.UserService;
-import com.mongodb.MongoException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     private final UserRepository userRepository;
 
@@ -38,7 +37,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public User update(User user) {
+    public User update(String id, User user) {
+        user.setId(id);
         return userRepository.save(user);
     }
 
@@ -46,6 +46,17 @@ public class UserServiceImpl implements UserService{
     public boolean delete(String id) {
         try {
             userRepository.delete(id);
+            return true;
+        } catch (DataAccessException e) {
+            LOGGER.info(e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteAll() {
+        try {
+            userRepository.deleteAll();
             return true;
         } catch (DataAccessException e) {
             LOGGER.info(e.getMessage());

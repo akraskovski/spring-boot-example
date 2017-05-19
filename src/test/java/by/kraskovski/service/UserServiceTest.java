@@ -1,27 +1,37 @@
 package by.kraskovski.service;
 
 import by.kraskovski.model.User;
-import by.kraskovski.repository.UserRepository;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UserServiceTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
-    @Test
-    public void find() {
-        User user = userRepository.findOne("5915a1973e53020b487a30d2");
-        assertEquals("Alice", user.getFirstname());
-        assertEquals("Smith", user.getLastname());
+    @Before
+    public void before() {
+        userService.deleteAll();
+        for (int index = 0; index < 500; index++)
+            userService.create(new User("firstname" + index, "lastname" + index, index));
     }
 
+    @After
+    public void after() {
+        userService.deleteAll();
+    }
+
+    @Test(timeout = 500)
+    public void findAll() {
+        assertNotNull(userService.findAll());
+    }
 }
