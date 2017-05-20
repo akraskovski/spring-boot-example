@@ -29,13 +29,27 @@ public class UserController {
     }
 
     @RequestMapping
-    public ResponseEntity<List<User>> getAll() {
+    public ResponseEntity<List<User>> loadAll() {
+        LOGGER.info("start loadAll users");
         try {
             List<User> users = userService.findAll();
             LOGGER.info("Found {} users", users.size());
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (DataAccessException e) {
-            System.out.println(e.getMessage());
+            LOGGER.info(e.getMessage());
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping("/{id}")
+    public ResponseEntity<UserDTO> loadOne(@PathVariable String id) {
+        LOGGER.info("start loadOne user by id: ", id);
+        try {
+            User user = userService.find(id);
+            LOGGER.info("Found: {}", user);
+            return new ResponseEntity<>(userConverter.userToDTO(user), HttpStatus.OK);
+        } catch (DataAccessException e) {
+            LOGGER.info(e.getMessage());
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
