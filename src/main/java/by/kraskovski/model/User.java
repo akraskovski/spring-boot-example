@@ -1,8 +1,13 @@
 package by.kraskovski.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 
-public class User {
+import java.util.Collection;
+
+public class User implements Authentication {
     @Id
     private String id;
     private String username;
@@ -10,6 +15,8 @@ public class User {
     private String firstname;
     private String lastname;
     private int age;
+    @Transient
+    private boolean authenticated = true;
 
     public User() {
     }
@@ -18,6 +25,41 @@ public class User {
         this.firstname = firstname;
         this.lastname = lastname;
         this.age = age;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public Object getCredentials() {
+        return password;
+    }
+
+    @Override
+    public Object getDetails() {
+        return this;
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return username;
+    }
+
+    @Override
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    @Override
+    public void setAuthenticated(boolean authenticated) throws IllegalArgumentException {
+        this.authenticated = authenticated;
+    }
+
+    @Override
+    public String getName() {
+        return firstname + " " + lastname;
     }
 
     public String getId() {

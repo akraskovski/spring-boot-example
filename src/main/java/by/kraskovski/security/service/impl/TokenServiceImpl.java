@@ -3,12 +3,11 @@ package by.kraskovski.security.service.impl;
 import by.kraskovski.model.User;
 import by.kraskovski.security.service.TokenService;
 import by.kraskovski.service.UserService;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +18,7 @@ import java.util.Map;
 public class TokenServiceImpl implements TokenService {
     @Value("secret.key")
     private String secretKey;
+    private final String AUTH_HEADER_NAME = "x-auth-token";
     private final UserService userService;
 
     @Autowired
@@ -44,6 +44,21 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public Authentication authenticate(HttpServletRequest request) {
+        String token = request.getHeader(AUTH_HEADER_NAME);
+        if (token != null) {
+            final Jws<Claims> tokenData = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
+            User user = getUserFromToken(tokenData);
+            if (validatePassword(tokenData, user))
+                return user;
+        }
         return null;
+    }
+
+    private User getUserFromToken(Jws<Claims> tokenData) throws UsernameNotFoundException {
+        return userService.findByUsername(tokenData.getBody().get("username").toString());
+    }
+
+    private boolean validatePassword(Jws<Claims> tokenData, User user) {
+        return user != null && tokenData.getBody().get("password").toString().equals(user.getPassword());
     }
 }
